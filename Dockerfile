@@ -4,6 +4,8 @@ FROM s390x/ubuntu:18.04 AS kub-build
 # The author
 MAINTAINER Sarah Julia Kriesch <sarah.kriesch@ibm.com>
 
+ARG VERSION=1.8
+
 ENV SOURCE_ROOT=/root
 ENV KUBECONFIG=/etc/kubernetes/admin.conf
 ENV GOROOT=/root/go
@@ -51,8 +53,9 @@ RUN echo "Installing necessary packages" && \
     #Build test binary
     && git clone https://github.com/kubernetes/kubernetes.git /root/go/src/k8s.io/kubernetes \
     && cd /root/go/src/k8s.io/kubernetes/ 
-
-CMD  make WHAT="test/e2e/e2e.test vendor/github.com/onsi/ginkgo/ginkgo cmd/kubectl" 
+    ##Upgrade Kubernetes and create tests
+CMD make release-in-a-container ARCH=s390x \
+   # && make WHAT="test/e2e/e2e.test vendor/github.com/onsi/ginkgo/ginkgo cmd/kubectl" 
     #Cleanup of package
 RUN apt-get remove -y \
     apt-utils \
@@ -70,7 +73,6 @@ COPY --from=kub-build /usr/bin/docker* /usr/bin/kube* /usr/bin/
 #COPY --from=kub-build /root/go/src/k8s.io/kubernetes/_output/local/bin/linux/s390x/e2e.test /root/e2e.test
 
 #Start kubernetes and tests
-COPY ./start-kubernetes.sh /
-RUN chmod +x /start-kubernetes.sh \
-ENTRYPOINT ["/start-kubernetes.sh"]
-
+ADD ./start_kubernetes.sh /
+RUN chmod +x /start_kubernetes.sh 
+ENTRYPOINT ["/bin/bash", "/start_kubernetes.sh"]
