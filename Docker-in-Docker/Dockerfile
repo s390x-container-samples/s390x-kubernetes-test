@@ -1,4 +1,4 @@
-FROM s390x/ubuntu:18.04
+FROM ubuntu:latest
 MAINTAINER jerome.petazzoni@docker.com
 
 # Let's start with some basic stuff.
