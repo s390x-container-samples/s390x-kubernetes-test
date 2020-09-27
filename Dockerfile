@@ -42,8 +42,7 @@ RUN echo "Installing necessary packages" && \
     && cd /root/go/src/k8s.io/kubernetes/ 
 CMD make release-in-a-container ARCH=s390x \
     #Cleanup of package
-RUN apk del git \
-    curl 
+RUN apk del git  
 
 
 FROM s390x/docker AS work
