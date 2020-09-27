@@ -25,7 +25,6 @@ RUN echo "Installing necessary packages" && \
     curl \ 
     git \
     openssh-client \
-    ca-certificates \
     gnupg \
     && rm -rf /var/cache/apk/* \
     #Installation of latest GO
