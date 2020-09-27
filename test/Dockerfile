@@ -4,6 +4,6 @@ FROM kubernetes
 # The author
 MAINTAINER Sarah Julia Kriesch <sarah.kriesch@ibm.com>
 
-ARG VERSION=release-1.9
+ARG VERSION=release-1.13
 
 
