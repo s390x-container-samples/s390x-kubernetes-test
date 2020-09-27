@@ -6,7 +6,7 @@ MAINTAINER Sarah Julia Kriesch <sarah.kriesch@ibm.com>
 
 ARG VERSION=v1.19.2
 
-
+ENV KUBECONFIG=/etc/kubernetes/admin.conf
 
 RUN echo "Download of e2e.test"  \
     && curl "https://storage.googleapis.com/kubernetes-release/release/${VERSION}/kubernetes-test-linux-s390x.tar.gz" | tar -C /root/ -xz \
