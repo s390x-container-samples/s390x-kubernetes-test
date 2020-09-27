@@ -19,7 +19,7 @@ WORKDIR $SOURCE_ROOT
 
 
 RUN echo "Installing necessary packages" && \ 
-    apk add --no-cache \
+    apk --update add \
     apache2 \
     apache2-ssl \
     curl \ 
@@ -27,6 +27,7 @@ RUN echo "Installing necessary packages" && \
     openssh-client \
     ca-certificates \
     gnupg \
+    && rm -rf /var/cache/apk/* \
     #Installation of latest GO
     && echo "Installation of latest GO" && \
     curl "https://dl.google.com/go/$(curl https://golang.org/VERSION?m=text).linux-s390x.tar.gz" | tar -C /root/ -xz \
