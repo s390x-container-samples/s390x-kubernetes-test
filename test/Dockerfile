@@ -6,7 +6,6 @@ MAINTAINER Sarah Julia Kriesch <sarah.kriesch@ibm.com>
 
 ARG VERSION=v1.19.2
 
-WORKDIR $SOURCE_ROOT
 
 
 RUN echo "Download of e2e.test"  \
