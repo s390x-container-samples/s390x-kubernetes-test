@@ -4,7 +4,7 @@ FROM s390x/docker AS build
 # The author
 MAINTAINER Sarah Julia Kriesch <sarah.kriesch@ibm.com>
 
-ARG VERSION=release-1.13
+ARG VERSION=v1.19.2
 
 ENV SOURCE_ROOT=/root
 ENV KUBECONFIG=/etc/kubernetes/admin.conf
@@ -38,9 +38,8 @@ RUN echo "Installing necessary packages" && \
     && git clone https://github.com/kubernetes/test-infra.git /root/go/src/k8s.io/test-infra \
     && cd /root/go/src/k8s.io/test-infra/ \
     #Upgrade/ install Kubernetes
-    && git clone https://github.com/kubernetes/kubernetes.git /root/go/src/k8s.io/kubernetes \
-    && cd /root/go/src/k8s.io/kubernetes/ \ 
-    && git checkout ${VERSION} 
+    && git clone https://github.com/kubernetes/kubernetes.git --branch=${VERSION} /root/go/src/k8s.io/kubernetes \
+    && cd /root/go/src/k8s.io/kubernetes/ 
 CMD make release-in-a-container ARCH=s390x \
     #Cleanup of package
 RUN apk del git \
