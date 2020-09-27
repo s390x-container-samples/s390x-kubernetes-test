@@ -4,7 +4,7 @@ FROM s390x/docker AS build
 # The author
 MAINTAINER Sarah Julia Kriesch <sarah.kriesch@ibm.com>
 
-ARG VERSION=release-1.9
+ARG VERSION=release-1.13
 
 ENV SOURCE_ROOT=/root
 ENV KUBECONFIG=/etc/kubernetes/admin.conf
