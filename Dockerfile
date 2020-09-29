@@ -1,5 +1,5 @@
 # Base image
-FROM s390x/ubuntu:18.04 AS kub-build
+FROM dind-ubuntu AS build
 
 # The author
 MAINTAINER Sarah Julia Kriesch <sarah.kriesch@ibm.com>
@@ -28,16 +28,8 @@ RUN echo "Installing necessary packages" && \
     ca-certificates \
     gnupg-agent \
     software-properties-common \
-    && curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
-    && echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list \ 
-    && apt-get update && apt-get install -y \
-    docker.io \
-    kubelet \
-    kubeadm \
-    && apt-mark hold kubelet kubeadm kubectl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    && systemctl enable docker \
     #Installation of latest GO
     && echo "Installation of latest GO" && \
     curl "https://dl.google.com/go/$(curl https://golang.org/VERSION?m=text).linux-s390x.tar.gz" | tar -C /root/ -xz \
@@ -60,7 +52,21 @@ RUN apt-get remove -y \
     && apt autoremove -y 
 
 
-FROM s390x/ubuntu:18.04 AS work
+FROM dind-ubuntu AS work
+
+RUN echo "Installing necessary packages" && \ 
+    apt-get update && apt-get install -y \
+    apt-transport-https \
+    apt-utils \
+    curl \
+    ca-certificates \
+    && curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
+    && echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list \ 
+    kubelet \
+    kubeadm \
+    && apt-mark hold kubelet kubeadm kubectl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 WORKDIR /etc/
 COPY --from=kub-build /etc/docker /etc/kubernetes /etc/
 #COPY --from=kub-build /var/lib/docker* /var/lib/kubelet /var/lib/
